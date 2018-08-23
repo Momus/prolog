@@ -4,3 +4,34 @@ Generated from README.org, so if you have org-mode, go read that.
 *** Day 1ish
     - Read through [[https://pragprog.com/book/btlang/seven-languages-in-seven-weeks][Prag Prog]] Prolog chapter. Whet the apetitie.
     - Started this Prog Blog Log
+    - Started _Learn Prolog NOW!_ below.
+* _Learn Prolog NOW!_ [[http://www.learnprolognow.org/lpnpage.php?pagetype=html&pageid=lpn-htmlse1][Notes]]
+*** Chapter 1
+***** Section 1.1
+      Only three basic constructs in Prolog:
+      - facts
+      - rules
+      - queries
+      A collection of facts and rules is called a *knowlage base* or *data base*
+      Prolog is run by posing queries over the knowlage base.
+******* Weirdness
+        - The operator $:-$ is like a backwards if-then clause.  $A :-
+          B$ means if $B$ obtains then $A$ must be true.
+        - The comma is a logical ``and''. Which makes sense, but is very subtle.
+        - A listing with multiple rules with the same head is
+          expressing a logical disjuction.
+          #+BEGIN_SRC prolog
+            playsAirGuitar(butch):-
+                happy(butch).
+            playsAirGuitar(butch):-
+                listens2Music(butch).
+          #+END_SRC
+          means Butch plays the air guitar when he's happy OR he's
+          listening to music. Or a semicolon is a simpler way of
+          saying the same thing:
+          #+BEGIN_SRC prolog
+            playsAirGuitar(butch):-
+                happy(butch);
+                listens2Music(butch).
+          #+END_SRC
+        - Any word beginning with a capital letter is a variable.
