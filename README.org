@@ -1,0 +1,6 @@
+Generated from README.org, so if you have org-mode, go read that.
+* Findings
+* Daily Steps.
+*** Day 1ish
+    - Read through [[https://pragprog.com/book/btlang/seven-languages-in-seven-weeks][Prag Prog]] Prolog chapter. Whet the apetitie.
+    - Started this Prog Blog Log
