@@ -142,7 +142,11 @@ Generated from README.org, so if you have org-mode, go read that.
         - wizard(Y). ::  Y = ron ; Y = harry.
         - witch(Y). :: ERROR: Undefined procedure: witch/1
         
-***** Section 1.4
+***** Section 1.4 Practical Session
+      Practice with Prolog!
+      $listing(something)$ gets you more info on that
+      something. Just $?-listing$ gets you a whole bunch of stuff on
+      swi-pl it seems.
                          
 
 
