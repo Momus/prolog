@@ -1,6 +1,7 @@
 Generated from README.org, so if you have org-mode, go read that.
 * Findings
 * Daily Steps.
+*** Day 2: Straight intp Prolog NOW!
 *** Day 1ish
     - Read through [[https://pragprog.com/book/btlang/seven-languages-in-seven-weeks][Prag Prog]] Prolog chapter. Whet the apetitie.
     - Started this Prog Blog Log
@@ -17,9 +18,9 @@ Generated from README.org, so if you have org-mode, go read that.
 ******* Weirdness
         - The operator $:-$ is like a backwards if-then clause.  $A :-
           B$ means if $B$ obtains then $A$ must be true.
-        - The comma is a logical ``and''. Which makes sense, but is very subtle.
-        - A listing with multiple rules with the same head is
-          expressing a logical disjuction.
+        - The comma is a logical ``and.'' Makes sense, but is very subtle.
+        - Listing with multiple rules with the same head is expressing
+          a logical disjuction.
           #+BEGIN_SRC prolog
             playsAirGuitar(butch):-
                 happy(butch).
@@ -35,3 +36,115 @@ Generated from README.org, so if you have org-mode, go read that.
                 listens2Music(butch).
           #+END_SRC
         - Any word beginning with a capital letter is a variable.
+***** Section 1.2 Prolog Syntax
+******* Atoms
+        1. Charecter string beginning with a lower-case letter, can
+           include underscore charecter, but must start with a
+           lowercase letter.
+        2. A sequence of charecters enclosed in quotes. This sequene
+           is called the "atom name." Can have spaces, which, indeed
+           is the point of the quotation marks.
+        3. A string of special charecters. $\;$  $:-$ and $@=$ and $=====>$
+           are all atoms, but some of these atoms have predefined meaning.
+******* Numbers
+        Prolog has both floating point numbers and Integers, but cares
+        very little about them.  Integers will be talked about again
+        in this book as they count things, floating points are already forgotten.
+******* Variables
+        - Start with an upper-case letter or an underscrore, followed
+          by a string of alpha-numeric charecters and underscores.
+        - $_$ --- the single underscore charecter --- is called ``the
+          empty variable,'' and is special.
+******* Complex Terms
+        - Functor + sequence of arguments.
+          - Arguments are in enclosed in parentheses, separated by commas.
+          - Functor must be an atom, arguments can be any kind of term
+          - Complex terms can have other complex terms nested (aka
+            _recursivelly structured_ inside them:
+            #+BEGIN_SRC prolog
+              hide(X, father(father(father(father(butch)))))
+            #+END_SRC
+          - Number of arguments is called the _arity_
+          - Predicates are refered to in documentation with
+            name/arity:
+            listens2Music/1
+            love/2 and love/3 are distinct.
+***** Section 1.3 Exercises
+******* 1.1 Which are atoms, which are variables, which are niether?
+        - vINCENT :: atom
+        - Footmassage ::  variable
+        - variable23 :: atom
+        - Variable2000 :: variable
+        - big_kahuna_burger :: atom
+        - 'big kahuma burger' :: atom
+        - 'Jules' :: atom
+        - _Jules :: variable
+        - '_Jules' :: atom
+******* 1.2  Which are atoms, variables, complex terms, and which are not terms at all?
+        - loves(Vincent, mia) :: loves/2
+        - 'loves(Vincent, mia)' :: atom
+        - Butch(boxer) :: --not a term.  Functor must be an atom.
+        - boxer(Butch) :: boxer/1
+        - and(big(burger),kahuna(burger)) :: and/2
+        - _and(big(X), kahuna(X)) :: --not a term.  Functor must be an atom.
+        - (Butch kills Vincent) :: ---not a term. Functor must be
+             immedietly followed by parentheses enclosing arguments.
+        - kills(Butch, Vincent) :: kills/2
+        - kills(Butch, Vincent :: ---not a term. Missing closing parentesis.
+******* 1.3 How many facts, rules, clauses, and predicates are there in this knowledge base?
+        What are the heads of the rules, and what are the goals they
+        contain?
+        #+BEGIN_SRC prolog
+          woman(vincent).
+          woman(mia).
+          man(jules).
+          person(X):-  man(X);  woman(X).
+          loves(X,Y):-  father(X,Y).
+          father(Y,Z):-  man(Y),  son(Z,Y).
+          father(Y,Z):-  man(Y),  daughter(Z,Y).
+        #+END_SRC
+        - Facts :: 3
+        - Rules ::  4
+          - heads :: 3 distinct with their goals:
+            - person/1 :: 2 goals:
+              - man/1
+              - woman/1
+            - loves/2 :: 1 goal
+              - father/2
+            - father/2 :: 2 goals
+              - man/1
+              - son/2
+            - father/2 :: 2 goals
+              - man/1
+              - daughter/2
+******* 1.4 Represent the following in Prolog
+        - Butch is a killer. :: killer(butch).
+        - Mia and Marsellus are married.  :: married(mia, marsellus).
+        - Zed is dead. :: dead(zed).
+        - Marsellus kills everyone who gives Mia a footmassage. ::
+             gives_footmassage(X, mia) :- kills(marsellus, X).
+        - Mia loves everyone who is a good dancer.  :: good_dancer(X)
+             :- loves(mia, X).
+        - Jules eats anything that is nutritious or tasty.  ::
+             eats(jules) :- tasty(X) ; nutritious(X)
+******* How does Prolog respond to the following queries, given the knowlage base:
+        #+BEGIN_SRC prolog
+          wizard(ron).
+          hasWand(harry).
+          quidditchPlayer(harry).
+          wizard(X):-  hasBroom(X),  hasWand(X).
+          hasBroom(X):-  quidditchPlayer(X).
+        #+END_SRC
+        - wizard(ron). :: true ; false.
+        - witch(ron). :: ERROR: Undefined procedure: witch/1
+        - quidditchPlayer(harry). :: true.
+        - wizard(harry). :: true.
+        - wizard(Y). ::  Y = ron ; Y = harry.
+        - witch(Y). :: ERROR: Undefined procedure: witch/1
+        
+***** Section 1.4
+                         
+
+
+
+                   
