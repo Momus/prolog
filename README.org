@@ -148,7 +148,133 @@ Generated from README.org, so if you have org-mode, go read that.
       something. Just $?-listing$ gets you a whole bunch of stuff on
       swi-pl it seems.
                          
+*** Chapter 2
 
+***** Unification
+      #+BEGIN_QUOTATION
+      Two terms unify if they are the same term or if they contain
+      variables that can be uniformly instantiated with terms in such
+      a way that the resulting terms are equal.
+      #+END_QUOTATION
+      - atoms :: unify when they are the same: $a = a$ and $a = 'a'$
+                 but $'b' = "b"$ returns false in  SWI-Prolog.
+      - numbers ::  same as atoms: $42 = 42$ but not $'2' = 2$
+      - complex terms :: $prop("subject") = prop("subject")$ is true,
+                         but, $prop("subject") = prop("object")$
+                         is not.
+      - variables :: unify with anything that can be instantiated.
+                     $X = a, X = b$ is false.
+      - complex terms :: $k(s(g), Y) k(X,t(k))$
+                         #+BEGIN_SRC prolog
+                           ?- k(s(g),Y) = k(X,t(k)).
+                           Y = t(k),
+                           X = s(g).
+                         #+END_SRC
+******* Occurs check
+        $father(X)  =  X$ works in Prolog. $X = father(X),  Y =
+        father(Y),  X  =  Y$ can crash some systems, but not SWI!
+        because Prolog doesn't check if the variable occurs in the
+        term being unified, so a recursive unification is possible,
+        though it seems to be discouraged. $unify_with_occurs_check/2$
+        exists if there's a danger.
+******* Programming with unification
+        #+BEGIN_SRC prolog :tangle "./LearnNOW/Chapter_02/cart_points.pl"
+          vertical(line(point(X, Y), point(X, Z))).
+          horizontal(line(point(X,Y), point(Z,Y))).
+        #+END_SRC
+        horizontal(line(point(4,A), point(2,4))).
+        A = 4.
 
+        ?- horizontal(line(point(24,31),Q)).
+        Q = point(_3876, 31).
 
-                   
+***** Exercises
+******* 2.2
+        #+BEGIN_SRC prolog :tangle "./LearnNOW/Chapter_02/Ex2_2.pl"
+          house_elf(dobby).
+          witch(hermione).
+          witch(rita_skeeter).
+          witch('McGonagall').
+          wizard(harry).
+          magic(X):- house_elf(X).
+          magic(Y):- wizard(Y).
+          magic(X):- witch(X).
+        #+END_SRC
+        So, if you do this exercise, and omit the `wizard(harry).`
+        line as in the book, swi-prolog will throw unpleasant errors,
+        specifically ``Undefined procedure: wizard/1'' at you until
+        you put it back.
+        - ?- magic(house_elf). :: Generates an "Undefined procedure:
+             wizard/1" error
+        - ?- witch(hermione). :: true (from KB)
+        - ?- wizard(harry) :: true
+        - magic(wizard) :: ``Undefined procedure: wizard/1''
+        - magic('McGonagall') :: true
+*******  Ex. 2.3 Tiny lexicon, a mini grammar, with one syntactic rule:
+        #+BEGIN_SRC prolog :tangle "./LearnNOW/Chapter_02/Ex2_3.pl"
+          word(determiner, a).
+          word(determiner, every).
+          word(noun, criminal).
+          word(noun, 'big kahuna burger').
+          word(verb, eats).
+          word(verb, likes).
+
+          sentence(Word1, Word2, Word3, Word4, Word5):-
+              word(determiner, Word1),
+              word(noun, Word2),
+              word(verb, Word3),
+              word(determiner, Word4),
+              word(noun, Word5).
+        #+END_SRC
+        Query: sentence(X1, X2, X3, X4, X5).
+        First response: 
+        #+BEGIN_SRC prolog :tangle no
+          X1 = X4, X4 =a,
+          X2 = X5 =, X5 = criminal,
+          X3 = eats
+        #+END_SRC
+        Thus: ``A criminal eats a criminal.''
+*******  Ex. 2.4
+        Knowledge base represents a lexicon containing six Italian
+        words:,
+        #+BEGIN_SRC prolog :tangle "./LearnNOW/Chapter_02/Ex2_4.pl"
+          word(astante,  a,s,t,a,n,t,e).
+          word(astoria,  a,s,t,o,r,i,a).
+          word(baratto,  b,a,r,a,t,t,o).
+          word(cobalto,  c,o,b,a,l,t,o).
+          word(pistola,  p,i,s,t,o,l,a).
+          word(statale,  s,t,a,t,a,l,e). 
+        #+END_SRC
+        Write a predicate, crossword/6 telling how to fill in the
+        grid.  First three arguments should be the vertical words,
+        from left to right, the last three horizontal words from top
+        to bottom.
+        #+BEGIN_SRC prolog :tangle "./LearnNOW/Chapter_02/Ex2_4_answer.pl"
+          crossword(V1, V2, V3, H1, H2, H3):-
+              word(V1, V1C1, V1H1, V1C3, V1H2, V1C5, V1H3, V1C7),
+              word(V2, V2C1, V2H1, V2C3, V2H2, V2C5, V2H3, V2C7),
+              word(V3, V3C1, V3H1, V3C3, V3H2, V3C5, V3H3, V3C7),
+              word(H1, H1C1, V1H1, H1C3, V2H1, H1C5, V3H1, H1C7),
+              word(H2, H2C1, V1H2, H2C3, V2H2, H2C5, V3H2, H2C7),
+              word(H3, H3C1, V1H3, H3C3, V2H3, H3C5, V3H3, H3C7).
+         #+END_SRC
+***** Practical Session
+******* KB
+        #+BEGIN_SRC prolog :tangle "./LearnNOW/Chapter_02/proof.pl"
+          f(a).
+          f(b).
+
+          g(a).
+          g(b).
+
+          h(b).
+
+          k(X):-
+              f(X),
+              g(X),
+              h(X).
+        #+END_SRC
+        use trace/0 to run through the execution of the query
+        $k(X)$. It's kinda cool. Add a term to the database using
+        assert/1 and see the effect on execution.
+        

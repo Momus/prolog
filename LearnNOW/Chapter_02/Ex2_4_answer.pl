@@ -1,0 +1,7 @@
+crossword(V1, V2, V3, H1, H2, H3):-
+    word(V1, V1C1, V1H1, V1C3, V1H2, V1C5, V1H3, V1C7),
+    word(V2, V2C1, V2H1, V2C3, V2H2, V2C5, V2H3, V2C7),
+    word(V3, V3C1, V3H1, V3C3, V3H2, V3C5, V3H3, V3C7),
+    word(H1, H1C1, V1H1, H1C3, V2H1, H1C5, V3H1, H1C7),
+    word(H2, H2C1, V1H2, H2C3, V2H2, H2C5, V3H2, H2C7),
+    word(H3, H3C1, V1H3, H3C3, V2H3, H3C5, V3H3, H3C7).
